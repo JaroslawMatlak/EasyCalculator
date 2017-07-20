@@ -51,6 +51,26 @@ namespace EasyCalculator.Models.ResultsStack
             return resultValue;
 
         }
+
+        public string GetDescriptionOfTheActiveResult()
+        {
+            string description = "";
+            int activeIndex = GetActiveResultId();
+            if (activeIndex >= 0)
+            {
+                var activeResult = this[activeIndex];
+                description += activeResult.PreviousResultValue.ToString();
+                description += activeResult.OperationIdentifier;
+                description += activeResult.Operand.ToString();
+                description += "=";
+                description += activeResult.GetOperationResult();
+            }
+            else
+                description = "0";
+            return description;
+
+
+        }
         private void RemoveResultsAfterLastActive()
         {
             var activeId = GetActiveResultId();
@@ -63,7 +83,7 @@ namespace EasyCalculator.Models.ResultsStack
                 x.ChangeActivity(false);
         }
 
-        private int GetActiveResultId()
+        public int GetActiveResultId()
         {
             int resultId = this.Count-1;
             var activeResults = this.Where(n => n.IsActive).Select(n => n.Id).ToList();
