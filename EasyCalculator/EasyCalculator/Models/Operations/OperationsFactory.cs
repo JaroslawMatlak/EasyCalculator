@@ -14,9 +14,11 @@ namespace EasyCalculator.Models.Operations
             switch (operationIdentifier.ToUpper())
             {
                 case "SUM":
+                case "+":
                     result = new OperationSum();
                     break;
                 case "DIFFERENCE":
+                case "-":
                     result = new OperationDifference();
                     break;
                 default:

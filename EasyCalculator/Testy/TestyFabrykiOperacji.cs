@@ -5,7 +5,7 @@ using EasyCalculator.Models.Operations;
 namespace Testy
 {
     [TestClass]
-    public class TestFabrykiOperacji
+    public class TestyFabrykiOperacji
     {
         [TestMethod]
         public void TestFabrykiPrawidlowyArgument()
@@ -19,7 +19,7 @@ namespace Testy
         public void TestFabrykiNieprawidlowyArgument()
         {
             var argument = "sUmakkkkancsaa";
-            IOperation expected = null;
+            //IOperation expected = ;
             var actual = OperationsFactory.ChooseOperation(argument);
             Assert.IsNull(actual);
         }
