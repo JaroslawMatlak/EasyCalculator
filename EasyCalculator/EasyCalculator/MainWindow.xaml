@@ -4,8 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EasyCalculator"
+        xmlns:viewmodel ="clr-namespace:EasyCalculator.ViewModels"
         mc:Ignorable="d"
         Title="EasyCalculator" Height="388.85" Width="264.2">
+    <Window.DataContext>
+        <viewmodel:MainWindowViewModel/>
+    </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="150*"/>
@@ -17,7 +21,11 @@
                 <RowDefinition Height="12*"/>
                 <RowDefinition Height="6*"/>
             </Grid.RowDefinitions>
-            <TextBox  Grid.Row="0" TextWrapping="Wrap" Text="TextBox" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="10,10,10,0" DockPanel.Dock="Right" FontSize="16" FontWeight="Bold"/>
+            <TextBox  Grid.Row="0" TextWrapping="Wrap" 
+                      Text="{Binding InsertedNumber, Mode=TwoWay}" 
+                      HorizontalContentAlignment="Right" 
+                      VerticalContentAlignment="Center" Margin="10,10,10,0" DockPanel.Dock="Right" 
+                      FontSize="16" FontWeight="Bold" IsEnabled="False"/>
             <Label Content="Label" Margin="10,0" Grid.Row="1" HorizontalContentAlignment="Right" VerticalContentAlignment="Stretch"/>
         </Grid>
         <Grid Grid.Row="1" Margin="5" DockPanel.Dock="Top">
@@ -34,24 +42,36 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Row="0" Grid.Column="0" Margin="5" Content=" 7 " HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold"/>
-            <Button Grid.Row="0" Grid.Column="1" Margin="5" Content=" 8 " HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold"/>
-            <Button Grid.Row="0" Grid.Column="2" Margin="5" Content=" 9 " HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold"/>
-            <Button Grid.Row="1" Grid.Column="0" Margin="5" Content="4" HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold"/>
-            <Button Grid.Row="1" Grid.Column="1" Margin="5" Content="5" HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold"/>
-            <Button Grid.Row="1" Grid.Column="2" Margin="5" Content="6" HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold"/>
-            <Button Grid.Row="2" Grid.Column="0" Margin="5" Content="1" HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold"/>
-            <Button Grid.Row="2" Grid.Column="1" Margin="5" Content="2" HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold"/>
-            <Button Grid.Row="2" Grid.Column="2" Margin="5" Content="3" HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold"/>
-            <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" Content="0" HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold"/>
+            <Button Command="{Binding NumericButtonClicked, Mode=TwoWay}" CommandParameter="7"
+                    Grid.Row="0" Grid.Column="0" Margin="5" Content=" 7 " HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold"/>
+            <Button Command="{Binding NumericButtonClicked, Mode=TwoWay}" CommandParameter="8"
+                    Grid.Row="0" Grid.Column="1" Margin="5" Content=" 8 " HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold"/>
+            <Button Command="{Binding NumericButtonClicked, Mode=TwoWay}" CommandParameter="9"
+                    Grid.Row="0" Grid.Column="2" Margin="5" Content=" 9 " HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold"/>
+            <Button Command="{Binding NumericButtonClicked, Mode=TwoWay}" CommandParameter="4"
+                    Grid.Row="1" Grid.Column="0" Margin="5" Content="4" HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold"/>
+            <Button Command="{Binding NumericButtonClicked, Mode=TwoWay}" CommandParameter="5"
+                    Grid.Row="1" Grid.Column="1" Margin="5" Content="5" HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold"/>
+            <Button Command="{Binding NumericButtonClicked, Mode=TwoWay}" CommandParameter="6"
+                    Grid.Row="1" Grid.Column="2" Margin="5" Content="6" HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold"/>
+            <Button Command="{Binding NumericButtonClicked, Mode=TwoWay}" CommandParameter="1"
+                    Grid.Row="2" Grid.Column="0" Margin="5" Content="1" HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold"/>
+            <Button Command="{Binding NumericButtonClicked, Mode=TwoWay}" CommandParameter="2"
+                    Grid.Row="2" Grid.Column="1" Margin="5" Content="2" HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold"/>
+            <Button Command="{Binding NumericButtonClicked, Mode=TwoWay}" CommandParameter="3"
+                    Grid.Row="2" Grid.Column="2" Margin="5" Content="3" HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold"/>
+            <Button Command="{Binding NumericButtonClicked, Mode=TwoWay}" CommandParameter="0"
+                    Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" Content="0" HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold"/>
 
-            <Button Grid.Row="3" Grid.Column="2" Margin="5" Content="," HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold"/>
+            <Button Command="{Binding NumericButtonClicked, Mode=TwoWay}" CommandParameter=","
+                    Grid.Row="3" Grid.Column="2" Margin="5" Content="," HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold"/>
 
             <Button Grid.Row="0" Grid.Column="3" Margin="5" Content=" - " HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold"/>
             <Button Grid.Row="1" Grid.Column="3" Margin="5" Content=" + " HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold"/>
             <Button Grid.Row="2" Grid.Column="3" Grid.RowSpan="2" Margin="5" Content=" = " HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold"/>
 
-            <Button Grid.Row="0" Grid.Column="4" Margin="5" Content=" C " HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold"/>
+            <Button  Grid.Row="0" Grid.Column="4" Margin="5" Content=" C " HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold" 
+                     Command="{Binding TestCommand, Mode=TwoWay}"/>
             <Button Grid.Row="1" Grid.Column="4" Margin="5" Content=" U " HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold"/>
             <Button Grid.Row="2" Grid.Column="4" Margin="5" Content=" R " HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold"/>
         </Grid>
