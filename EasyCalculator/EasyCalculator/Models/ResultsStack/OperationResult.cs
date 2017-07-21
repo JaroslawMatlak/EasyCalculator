@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace EasyCalculator.Models.ResultsStack
 {
-    //TODO - rozbić na strukturę i klasę
     public class OperationResult
     {
         public double PreviousResultValue;
@@ -17,7 +16,9 @@ namespace EasyCalculator.Models.ResultsStack
         public bool IsActive;
 
         public void ChangeActivity(bool targetActivity)
-        { this.IsActive = targetActivity; }
+        {
+            this.IsActive = targetActivity;
+        }
         public double GetOperationResult()
         {
             var operation = OperationsFactory.ChooseOperation(OperationIdentifier);

@@ -17,7 +17,11 @@ namespace EasyCalculator.Models.Operations
 
             double result=_number1;
             try { result = ComputeResult(); }
-            catch (Exception e) { MessageBox.Show(e.Message); }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                throw;
+            }
             return result;
         }
         protected abstract double ComputeResult();

@@ -21,8 +21,20 @@ namespace EasyCalculator.Models
 
         private static string AppendValue(string insertertedNumber, string valueToAppend)
         {
+            double temp;
+            if (!double.TryParse(insertertedNumber, out temp))
+            {
+                if (double.TryParse(valueToAppend, out temp) || valueToAppend == ",")
+                    return valueToAppend;
+                else
+                    return "0";
+
+            }
+
             string result = insertertedNumber;
-            if (!(result.IndexOf(",") >= 0 && valueToAppend == ","))
+             
+            if (!(result.IndexOf(",") >= 0 && valueToAppend.IndexOf(",") >=0) 
+                && (double.TryParse(valueToAppend, out temp) || valueToAppend == "," ))
                 result += valueToAppend;
             return result;
         }

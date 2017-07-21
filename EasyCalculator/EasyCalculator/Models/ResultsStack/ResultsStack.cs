@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EasyCalculator.Models.ResultsStack
 {
-    class ResultsStack : List<OperationResult>
+    public class ResultsStack : List<OperationResult>
     {
         public void Undo()
         {
@@ -71,7 +71,7 @@ namespace EasyCalculator.Models.ResultsStack
 
 
         }
-        private void RemoveResultsAfterLastActive()
+        public void RemoveResultsAfterLastActive()
         {
             var activeId = GetActiveResultId();
             for (int i = this.Count - 1; i>activeId;  --i)

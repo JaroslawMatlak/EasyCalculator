@@ -21,6 +21,12 @@ namespace EasyCalculator.Models.Operations
                 case "-":
                     result = new OperationDifference();
                     break;
+                case "*":
+                    result = new OperationProduct();
+                    break;
+                case ":":
+                    result = new OperationDivide();
+                    break;
                 default:
                     break;
             }

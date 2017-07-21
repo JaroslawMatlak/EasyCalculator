@@ -1,21 +1,21 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EasyCalculator.Models.Operations;
+using NUnit.Framework;
 
 namespace Testy
 {
-    [TestClass]
-    public class TestyFabrykiOperacji
+    [TestFixture]
+    public class OperationsFactoryTests
     {
-        [TestMethod]
-        public void TestFabrykiPrawidlowyArgument()
+        [TestCase("SUM", typeof(OperationSum))]
+        [TestCase("+", typeof(OperationSum))]
+        [TestCase("-", typeof(OperationDifference))]
+        public void TestFabrykiPrawidlowyArgument(string argument, Type expected)
         {
-            var argument = "sUm";
-            var expected = new OperationSum();
             var actual = OperationsFactory.ChooseOperation(argument);
-            Assert.AreEqual(expected.GetType(), actual.GetType());
+            Assert.AreEqual(expected, actual.GetType());
         }
-        [TestMethod]
+        [Test]
         public void TestFabrykiNieprawidlowyArgument()
         {
             var argument = "sUmakkkkancsaa";
@@ -24,4 +24,5 @@ namespace Testy
             Assert.IsNull(actual);
         }
     }
+
 }

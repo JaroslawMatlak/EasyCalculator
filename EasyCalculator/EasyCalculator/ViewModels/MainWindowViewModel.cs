@@ -18,7 +18,6 @@ namespace EasyCalculator.ViewModels
         private string _lastOperationIdentifier;
         private bool _insertNewNumber = true;
         private ResultsStack _resultsStack;
-        private double _lastResult;
         private double _lastOperand;
         private double _actualResult;
 
@@ -36,17 +35,10 @@ namespace EasyCalculator.ViewModels
             {
                 if(IsValueNumeric(value))
                     _insertedNumber = value;
-
                 OnPropertyChanged(() => InsertedNumber);
             }
         }
-        public string LastResulDescription
-        {
-            get
-            {
-                return _resultsStack.GetDescriptionOfTheActiveResult();
-            }
-        }
+        public string LastResulDescription { get => _resultsStack.GetDescriptionOfTheActiveResult();}
         public string LastOperationSign { get => _lastOperationIdentifier;
             set
             {
@@ -58,8 +50,6 @@ namespace EasyCalculator.ViewModels
         public ICommand OperationButtonClicked { get; set; }
         public ICommand ActionButtonClicked { get; set; }
 
-
-
         public MainWindowViewModel()
         {
             ResetInitialValues();
@@ -67,14 +57,13 @@ namespace EasyCalculator.ViewModels
             OperationButtonClicked = new DelegateCommand<string>(OperationButtonClickedMethod);
             ActionButtonClicked = new DelegateCommand<string>(ActionButtonClickedMethod);
 
-            OnPropertyChanged(()=> InsertedNumber);
+            RefreshAllProperties();
         }
 
         private void ResetInitialValues()
         {
             _resultsStack = new ResultsStack();
             _resultsStack.AppendNewResult(0, "+");
-            _lastResult = 0;
             _actualResult = 0;
             LastOperationSign = "+";
         }
@@ -126,21 +115,43 @@ namespace EasyCalculator.ViewModels
                 LastOperationSign = value;
                 return;
             }
-            if (!_insertNewNumber)
-            {
-                double.TryParse(_insertedNumber, out _lastOperand);
-            }
+            UseInsertedNumberAsNewOperand();
 
             _insertNewNumber = true;
+
             _resultsStack.AppendNewResult(_lastOperand, _lastOperationIdentifier);
 
-            if(value != "=")
+            if (value != "=")
                 LastOperationSign = value;
-            _lastResult = _actualResult;
-            _actualResult = _resultsStack.GetResultFromTheLastActive();
-            _insertedNumber = _actualResult.ToString();
-            RefreshAllProperties();
 
+            GetResult();
+
+            RefreshAllProperties();
+        }
+
+        private void GetResult()
+        {
+            try
+            {
+                _actualResult = _resultsStack.GetResultFromTheLastActive();
+                _insertedNumber = _actualResult.ToString();
+            }
+            catch
+            {
+                PreformHardUndoOnResultsStack();
+            }
+        }
+
+        private void UseInsertedNumberAsNewOperand()
+        {
+            if (!_insertNewNumber)
+                double.TryParse(_insertedNumber, out _lastOperand);
+        }
+
+        private void PreformHardUndoOnResultsStack()
+        {
+            _resultsStack.Undo();
+            _resultsStack.RemoveResultsAfterLastActive();
         }
 
         private void ClearTheNumberAfterPerformingAnOperation()
@@ -152,13 +163,10 @@ namespace EasyCalculator.ViewModels
             }
         }
 
-        private bool IsValueNumeric(string value)
+        private static bool IsValueNumeric(string value)
         {
             double testNumber;
-            if (!double.TryParse(value, out testNumber))
-                return false;
-
-            return false;
+            return double.TryParse(value, out testNumber);
         }
     }
 }
