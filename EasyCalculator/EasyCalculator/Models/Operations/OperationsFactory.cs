@@ -15,16 +15,21 @@ namespace EasyCalculator.Models.Operations
             {
                 case "SUM":
                 case "+":
+                case "ADD":
                     result = new OperationSum();
                     break;
                 case "DIFFERENCE":
                 case "-":
+                case "SUBTRACT":
                     result = new OperationDifference();
                     break;
                 case "*":
+                case "MULTIPLY":
                     result = new OperationProduct();
                     break;
                 case ":":
+                case "/":
+                case "DIVIDE":
                     result = new OperationDivide();
                     break;
                 default:

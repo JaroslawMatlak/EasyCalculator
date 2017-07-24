@@ -11,9 +11,13 @@ namespace EasyCalculator.Models
         public static string StartAppending(string insertertedNumber, string valueToAppend)
         {
             var result = insertertedNumber;
+            var finalValueToAppend = valueToAppend;
+            if (valueToAppend == "OemComma")
+                finalValueToAppend = "";
+            finalValueToAppend = finalValueToAppend.Replace("NumPad", "").Replace("D", "");
 
-            result = AppendValue(result,  valueToAppend);
-            result = RemoveLeadingZeros(result, valueToAppend);
+            result = AppendValue(result, finalValueToAppend);
+            result = RemoveLeadingZeros(result, finalValueToAppend);
 
             return result;
 

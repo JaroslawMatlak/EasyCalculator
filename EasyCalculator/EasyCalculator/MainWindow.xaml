@@ -4,12 +4,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EasyCalculator"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
         xmlns:viewmodel ="clr-namespace:EasyCalculator.ViewModels"
         mc:Ignorable="d"
         Title="EasyCalculator" MinHeight="350" MinWidth="300" Height="350" Width="300">
     <Window.DataContext>
         <viewmodel:MainWindowViewModel/>
     </Window.DataContext>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="KeyDown">
+            <cmd:EventToCommand Command="{Binding KeyPressedCommand}" PassEventArgsToCommand="True"/>
+           
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
 
     <Grid>
 
@@ -57,46 +65,46 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Button Command="{Binding NumericButtonClicked, Mode=TwoWay}" CommandParameter="7"
+            <Button Command="{Binding NumericButtonClicked}" CommandParameter="7"
                     Grid.Row="0" Grid.Column="0"  Content=" 7 " />
-            <Button Command="{Binding NumericButtonClicked, Mode=TwoWay}" CommandParameter="8"
+            <Button Command="{Binding NumericButtonClicked}" CommandParameter="8"
                     Grid.Row="0" Grid.Column="1"  Content=" 8 " />
-            <Button Command="{Binding NumericButtonClicked, Mode=TwoWay}" CommandParameter="9"
+            <Button Command="{Binding NumericButtonClicked}" CommandParameter="9"
                     Grid.Row="0" Grid.Column="2"  Content=" 9 " />
-            <Button Command="{Binding NumericButtonClicked, Mode=TwoWay}" CommandParameter="4"
+            <Button Command="{Binding NumericButtonClicked}" CommandParameter="4"
                     Grid.Row="1" Grid.Column="0"  Content="4" />
-            <Button Command="{Binding NumericButtonClicked, Mode=TwoWay}" CommandParameter="5"
+            <Button Command="{Binding NumericButtonClicked}" CommandParameter="5"
                     Grid.Row="1" Grid.Column="1" Content="5" />
-            <Button Command="{Binding NumericButtonClicked, Mode=TwoWay}" CommandParameter="6"
+            <Button Command="{Binding NumericButtonClicked}" CommandParameter="6"
                     Grid.Row="1" Grid.Column="2"  Content="6" />
-            <Button Command="{Binding NumericButtonClicked, Mode=TwoWay}" CommandParameter="1"
+            <Button Command="{Binding NumericButtonClicked}" CommandParameter="1"
                     Grid.Row="2" Grid.Column="0"  Content="1" />
-            <Button Command="{Binding NumericButtonClicked, Mode=TwoWay}" CommandParameter="2"
+            <Button Command="{Binding NumericButtonClicked}" CommandParameter="2"
                     Grid.Row="2" Grid.Column="1"  Content="2"/>
-            <Button Command="{Binding NumericButtonClicked, Mode=TwoWay}" CommandParameter="3"
+            <Button Command="{Binding NumericButtonClicked}" CommandParameter="3"
                     Grid.Row="2" Grid.Column="2" Content="3" />
-            <Button Command="{Binding NumericButtonClicked, Mode=TwoWay}" CommandParameter="0"
+            <Button Command="{Binding NumericButtonClicked}" CommandParameter="0"
                     Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"  Content="0" />
-            <Button Command="{Binding NumericButtonClicked, Mode=TwoWay}" CommandParameter=","
+            <Button Command="{Binding NumericButtonClicked}" CommandParameter=","
                     Grid.Row="3" Grid.Column="2"  Content="," />
 
-            <Button Command="{Binding OperationButtonClicked, Mode=TwoWay}" CommandParameter="-"
+            <Button Command="{Binding OperationButtonClicked}" CommandParameter="-"
                     Grid.Row="0" Grid.Column="3"  Content=" - " />
-            <Button Command="{Binding OperationButtonClicked, Mode=TwoWay}" CommandParameter="+"
+            <Button Command="{Binding OperationButtonClicked}" CommandParameter="+"
                     Grid.Row="1" Grid.Column="3"  Content=" + "/>
-            <Button Command="{Binding OperationButtonClicked, Mode=TwoWay}" CommandParameter="*"
+            <Button Command="{Binding OperationButtonClicked}" CommandParameter="*"
                     Grid.Row="2" Grid.Column="3"  Content=" * "/>
-            <Button Command="{Binding OperationButtonClicked, Mode=TwoWay}" CommandParameter=":"
+            <Button Command="{Binding OperationButtonClicked}" CommandParameter=":"
                     Grid.Row="3" Grid.Column="3"  Content=" : "/>
-            <Button Command="{Binding OperationButtonClicked, Mode=TwoWay}" CommandParameter="="
+            <Button Command="{Binding OperationButtonClicked}" CommandParameter="="
                     Grid.Row="0" Grid.Column="4" Grid.RowSpan="4"  Content=" = " />
 
-            <Button Command="{Binding ActionButtonClicked, Mode=TwoWay}" CommandParameter="C"
+            <Button Command="{Binding ActionButtonClicked}" CommandParameter="C"
                     Grid.Row="0" Grid.Column="5"  Content=" C "  ToolTip="Clear"/>
-            <Button Command="{Binding ActionButtonClicked, Mode=TwoWay}" CommandParameter="U"
+            <Button Command="{Binding ActionButtonClicked}" CommandParameter="U"
                     IsEnabled="{Binding CanUndo, Mode=OneWay}"
                     Grid.Row="1" Grid.Column="5"  Content=" U "  ToolTip="Undo"/>
-            <Button Command="{Binding ActionButtonClicked, Mode=TwoWay}" CommandParameter="R"
+            <Button Command="{Binding ActionButtonClicked}" CommandParameter="R"
                     IsEnabled="{Binding CanRedo, Mode=OneWay}"
                     Grid.Row="2" Grid.Column="5"  Content=" R "  ToolTip="Redo"/>
         </Grid>
