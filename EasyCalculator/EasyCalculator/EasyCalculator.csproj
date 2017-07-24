@@ -74,6 +74,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Services\KeyStringPreparator.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Page Include="MainWindow.xaml">
@@ -90,7 +92,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\NumberStringAppender.cs" />
+    <Compile Include="Services\NumberStringAppender.cs" />
     <Compile Include="Models\Operations\IOperation.cs" />
     <Compile Include="Models\Operations\Operation.cs" />
     <Compile Include="Models\Operations\OperationDifference.cs" />

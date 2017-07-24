@@ -11,19 +11,23 @@ using EasyCalculator.Models.ResultsStack;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using GalaSoft.MvvmLight.Command;
+using EasyCalculator.Services;
 
 namespace EasyCalculator.ViewModels
 {
-    public class MainWindowViewModel : INotifyPropertyChanged
+    public class MainWindowViewModel : BaseViewModel
     {
+        #region Declarations
+        #region Private
+
+        private bool _insertNewNumber = true;
+        private double _actualResult;
+        private double _lastOperand;
         private string _insertedNumber="";
         private string _lastOperationIdentifier;
-        private bool _insertNewNumber = true;
         private ResultsStack _resultsStack;
-        private double _lastOperand;
-        private double _actualResult;
-
-        public event PropertyChangedEventHandler PropertyChanged;
+        #endregion //Private
+        #region Public
 
         public bool CanRedo { get => _resultsStack.Count > _resultsStack.GetActiveResultId()+1; }
         public bool CanUndo { get =>  _resultsStack.GetActiveResultId() >= 1 ; }
@@ -39,50 +43,30 @@ namespace EasyCalculator.ViewModels
             {
                 if(IsValueNumeric(value))
                     _insertedNumber = value;
-
                 OnPropertyChanged("InsertedNumber");
             }
         }
         public string LastResulDescription { get => _resultsStack.GetDescriptionOfTheActiveResult();}
-        public string LastOperationSign { get => _lastOperationIdentifier;
+        public string LastOperationSign
+        {
+            get => _lastOperationIdentifier;
             set
             {
                 _lastOperationIdentifier = value;
-
                 OnPropertyChanged("LastOperationSign");
             }
         }
-        private RelayCommand<string> _numericButtonClicked;
-        private RelayCommand<string> _operationButtonClicked;
-        private RelayCommand<string> _actionButtonClicked;
+        #endregion /Public
+        #region Commands
         private RelayCommand<KeyEventArgs> _keyPressedCommand;
-        public RelayCommand<string> NumericButtonClicked
+        private RelayCommand<string> _buttonClickedCommand;
+        public RelayCommand<string> ButtonClickedCommand
         {
             get
             {
-                return _numericButtonClicked
-                    ?? (_numericButtonClicked = new RelayCommand<string>(
-                        value => { NumericButtonClickedMethod(value); }
-                    ));
-            }
-        }
-        public RelayCommand<string> OperationButtonClicked
-        {
-            get
-            {
-                return _operationButtonClicked
-                    ?? (_operationButtonClicked = new RelayCommand<string>(
-                        value => { OperationButtonClickedMethod(value); }
-                    ));
-            }
-        }
-        public RelayCommand<string> ActionButtonClicked
-        {
-            get
-            {
-                return _actionButtonClicked
-                    ?? (_actionButtonClicked = new RelayCommand<string>(
-                        value => { ActionButtonClickedMethod(value); }
+                return _buttonClickedCommand
+                    ?? (_buttonClickedCommand = new RelayCommand<string>(
+                        value => { ButtonClickedMethod(value); }
                     ));
             }
         }
@@ -97,14 +81,15 @@ namespace EasyCalculator.ViewModels
 
             }
         }
-
+        #endregion //Commands
+        #endregion //Declarations
+        #region Constructor
         public MainWindowViewModel()
         {
             ResetInitialValues();
-            
-
             RefreshAllProperties();
         }
+        #endregion //Constructor
 
         private void ResetInitialValues()
         {
@@ -115,30 +100,25 @@ namespace EasyCalculator.ViewModels
         }
         private void KeyPressedMethod(KeyEventArgs args)
         {
-            switch (args.Key.ToString())
+            ButtonClickedMethod(args.Key.ToString());
+        }
+        private void ButtonClickedMethod(string value)
+        {
+            var KeyValue = KeyStringPreparator.SimplifyClickedButtonSign(value).ToUpper();
+            switch (KeyValue)
             {
-                case "D0":
-                case "D1":
-                case "D2":
-                case "D3":
-                case "D4":
-                case "D5":
-                case "D6":
-                case "D7":
-                case "D8":
-                case "D9":
-                case "NumPad0":
-                case "NumPad1":
-                case "NumPad2":
-                case "NumPad3":
-                case "NumPad4":
-                case "NumPad5":
-                case "NumPad6":
-                case "NumPad7":
-                case "NumPad8":
-                case "NumPad9":
-                case "OemComma":
-                    NumericButtonClickedMethod(args.Key.ToString());
+                case "0":
+                case "1":
+                case "2":
+                case "3":
+                case "4":
+                case "5":
+                case "6":
+                case "7":
+                case "8":
+                case "9":
+                case ",":
+                    NumericButtonClickedMethod(KeyValue);
                     break;
                 case "+":
                 case "-":
@@ -146,27 +126,17 @@ namespace EasyCalculator.ViewModels
                 case ":":
                 case "/":
                 case "=":
-                case "Add":
-                case "Subtract":
-                case "Multiply":
-                case "Divide":
-                case "OemPlus":
-                case "Enter":
-                    OperationButtonClickedMethod(args.Key.ToString().ToUpper());
+                    OperationButtonClickedMethod(KeyValue);
                     break;
                 case "C":
                 case "U":
                 case "R":
-                case "c":
-                case "u":
-                case "r":
-                    ActionButtonClickedMethod(args.Key.ToString().ToUpper());
+                    ActionButtonClickedMethod(KeyValue);
                     break;
-
-
             }
 
         }
+
         private void NumericButtonClickedMethod(string value)
         {
             ClearTheNumberAfterPerformingAnOperation();
@@ -174,12 +144,15 @@ namespace EasyCalculator.ViewModels
             OnPropertyChanged("InsertedNumber");
         }
 
-        private void AppendValueToTheInsertedNumber(string value)
-        {
-            _insertedNumber = NumberStringAppender.StartAppending(_insertedNumber, value);
-        }
 
         private void ActionButtonClickedMethod(string value)
+        {
+            PerformSpecificActionDependingOnValue(value);
+            _insertedNumber = _resultsStack.GetResultFromTheLastActive().ToString();
+            RefreshAllProperties();
+        }
+
+        private void PerformSpecificActionDependingOnValue(string value)
         {
             switch (value)
             {
@@ -193,55 +166,31 @@ namespace EasyCalculator.ViewModels
                     _resultsStack.Redo();
                     break;
             }
-            _insertedNumber = _resultsStack.GetResultFromTheLastActive().ToString();
-            RefreshAllProperties();
-        }
-
-        private void RefreshAllProperties()
-        {
-            OnPropertyChanged("InsertedNumber");
-            OnPropertyChanged("LastResulDescription");
-            OnPropertyChanged("LastOperationSign");
-            OnPropertyChanged("CanUndo");
-            OnPropertyChanged("CanRedo");
         }
 
         private void OperationButtonClickedMethod(string value)
         {
-            var sign = GetOperationSign(value);
+            var sign = KeyStringPreparator.GetOperationSign(value);
 
             if (_insertNewNumber && sign != "=")
             {
                 LastOperationSign = sign;
                 return;
             }
-            UseInsertedNumberAsNewOperand();
-
-            _insertNewNumber = true;
-
-            _resultsStack.AppendNewResult(_lastOperand, _lastOperationIdentifier);
-
-            if (sign != "=")
-                LastOperationSign = sign;
-
-            GetResult();
-
-            RefreshAllProperties();
-        }
-
-        private static string GetOperationSign(string value)
-        {
-            var val = value;
-            switch (value)
+            else
             {
-                case "OEMPLUS":
-                case "ENTER":
-                    val = "=";
-                    break;
-            }
-            return val;
-        }
+                SetInsertedNumberAsNewOperand();
 
+                _insertNewNumber = true;
+                _resultsStack.AppendNewResult(_lastOperand, _lastOperationIdentifier);
+
+                if (sign != "=")
+                    LastOperationSign = sign;
+
+                GetResult();
+                RefreshAllProperties();
+            }
+        }
         private void GetResult()
         {
             try
@@ -255,7 +204,21 @@ namespace EasyCalculator.ViewModels
             }
         }
 
-        private void UseInsertedNumberAsNewOperand()
+        private void RefreshAllProperties()
+        {
+            var propertiesInThisVM = new List<string>
+            { "InsertedNumber","LastResulDescription","LastOperationSign","CanUndo","CanRedo"};
+            RefreshProperties(propertiesInThisVM);
+        }
+
+        private void AppendValueToTheInsertedNumber(string value)
+        {
+            _insertedNumber = NumberStringAppender.StartAppending(_insertedNumber, value);
+        }
+
+        
+
+        private void SetInsertedNumberAsNewOperand()
         {
             if (!_insertNewNumber)
                 double.TryParse(_insertedNumber, out _lastOperand);
@@ -281,11 +244,6 @@ namespace EasyCalculator.ViewModels
             double testNumber;
             return double.TryParse(value, out testNumber);
         }
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            var handler = PropertyChanged;
-            if (handler != null)
-                handler(this, new PropertyChangedEventArgs(propertyName));
-        }
+
     }
 }

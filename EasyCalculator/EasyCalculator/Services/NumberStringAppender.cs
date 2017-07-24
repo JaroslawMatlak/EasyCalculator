@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EasyCalculator.Models
+namespace EasyCalculator.Services
 {
     public static class NumberStringAppender
     {
