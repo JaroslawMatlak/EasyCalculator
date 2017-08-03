@@ -9,22 +9,28 @@ namespace EasyCalculator.Models.ResultsStack
 {
     public class OperationResult
     {
-        public double PreviousResultValue;
-        public double Operand;
-        public string OperationIdentifier;
-        public int Id;
-        public bool IsActive;
+        private double previousResultValue;
+        private double operand;
+        private string operationIdentifier;
+        private int id;
+        private bool isActive;
 
-        public void ChangeActivity(bool targetActivity)
+        public double PreviousResultValue { get => previousResultValue; set => previousResultValue = value; }
+        public double Operand { get => operand; set => operand = value; }
+        public string OperationIdentifier { get => operationIdentifier; set => operationIdentifier = value; }
+        public int Id { get => id; set => id = value; }
+        public bool IsActive { get => isActive; set => isActive = value; }
+
+
+        public double OperationResultValue
         {
-            this.IsActive = targetActivity;
-        }
-        public double GetOperationResult()
-        {
-            var operation = OperationsFactory.ChooseOperation(OperationIdentifier);
-            if (operation != null)
-                return operation.DoTheOperation(PreviousResultValue, Operand);
-            return PreviousResultValue;
+            get
+            {
+                var operation = OperationsFactory.ChooseOperation(OperationIdentifier);
+                if (operation != null)
+                    return operation.DoTheOperation(PreviousResultValue, Operand);
+                return PreviousResultValue;
+            }
 
         }
     }

@@ -13,8 +13,8 @@ namespace EasyCalculator.Models.ResultsStack
             int lastActive = GetActiveResultId();
             if (lastActive > 0)
             {
-                this[lastActive].ChangeActivity(false);
-                this[lastActive-1].ChangeActivity(true);
+                this[lastActive].IsActive = false;
+                this[lastActive - 1].IsActive = true;
             }
 
         }
@@ -23,8 +23,8 @@ namespace EasyCalculator.Models.ResultsStack
             int lastActive = GetActiveResultId();
             if (lastActive < this.Count -1)
             {
-                this[lastActive].ChangeActivity(false);
-                this[lastActive+1].ChangeActivity(true);
+                this[lastActive].IsActive = false;
+                this[lastActive + 1].IsActive = true;
             }
         }
 
@@ -47,7 +47,7 @@ namespace EasyCalculator.Models.ResultsStack
             double resultValue = 0;
             int activeIndex = GetActiveResultId();
             if (activeIndex >= 0)
-                resultValue = this[activeIndex].GetOperationResult();
+                resultValue = this[activeIndex].OperationResultValue;
             return resultValue;
 
         }
@@ -63,7 +63,7 @@ namespace EasyCalculator.Models.ResultsStack
                 description += activeResult.OperationIdentifier;
                 description += activeResult.Operand.ToString();
                 description += "=";
-                description += activeResult.GetOperationResult();
+                description += activeResult.OperationResultValue;
             }
             else
                 description = "0";
@@ -80,7 +80,7 @@ namespace EasyCalculator.Models.ResultsStack
         private void SetAllResultsAsInactive()
         {
             foreach (var x in this)
-                x.ChangeActivity(false);
+                x.IsActive = false;
         }
 
         public int GetActiveResultId()
